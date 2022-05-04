@@ -97,6 +97,9 @@
     async function getTransactionInfo(){
         let resultTransaction = document.getElementById("resultTransaction");
         let transaction = resultTransaction.innerText;
+        if(transaction == ""){
+            return;
+        }
 
         let transactionInfo = await web3.eth.getTransaction(transaction);
         let resultTransactionInfo = document.getElementById("resultTransactionInfo");
