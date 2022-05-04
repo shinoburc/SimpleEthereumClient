@@ -75,26 +75,34 @@
         //Contract
         let count = await counter.methods.get().call();
         console.log(count);
+        display(count);
     }
 
     async function inc(){
         //Contract
         let coinbase = await getCoinbase();
         let incResult = await counter.methods.inc().send({from: coinbase});
-        console.log(incResult);
+        await get();
     }
 
     async function dec(){
         //Contract
         let coinbase = await getCoinbase();
         let decResult = await counter.methods.dec().send({from: coinbase});
-        console.log(decResult);
+        await get();
+    }
+
+    function display(string){
+        let result = document.getElementById("result");
+        result.innerText = string;
     }
 
 </script>
 </head>
 <body>
-
+    <div>
+        Count: <span id="result"></span>
+    </div>
     <input type="button" value="get" onClick="get();"/>
     <input type="button" value="inc" onClick="inc();"/>
     <input type="button" value="dec" onClick="dec();"/>
