@@ -75,13 +75,14 @@
         //Contract
         let count = await counter.methods.get().call();
         console.log(count);
-        display(count);
+        displayCount(count);
     }
 
     async function inc(){
         //Contract
         let coinbase = await getCoinbase();
         let incResult = await counter.methods.inc().send({from: coinbase});
+        displayTransaction(incResult.transactionHash);
         await get();
     }
 
@@ -89,23 +90,46 @@
         //Contract
         let coinbase = await getCoinbase();
         let decResult = await counter.methods.dec().send({from: coinbase});
+        displayTransaction(decResult.transactionHash);
         await get();
     }
+    
+    async function getTransactionInfo(){
+        let resultTransaction = document.getElementById("resultTransaction");
+        let transaction = resultTransaction.innerText;
 
-    function display(string){
-        let result = document.getElementById("result");
-        result.innerText = string;
+        let transactionInfo = await web3.eth.getTransaction(transaction);
+        let resultTransactionInfo = document.getElementById("resultTransactionInfo");
+        resultTransactionInfo.innerText = JSON.stringify(transactionInfo, null, 2);
+    }
+
+    function displayCount(string){
+        let count = document.getElementById("resultCount");
+        count.innerText = string;
+    }
+
+    function displayTransaction(string){
+        let resultTransaction = document.getElementById("resultTransaction");
+        resultTransaction.innerText = string;
     }
 
 </script>
 </head>
 <body>
     <div>
-        Count: <span id="result"></span>
-    </div>
-    <input type="button" value="get" onClick="get();"/>
-    <input type="button" value="inc" onClick="inc();"/>
-    <input type="button" value="dec" onClick="dec();"/>
+        <div>
+            Count: <span id="resultCount"></span>
+        </div>
+        <div>
+            Transaction: <span id="resultTransaction"></span>
+        </div>
+        <input type="button" value="get" onClick="get();"/>
+        <input type="button" value="inc" onClick="inc();"/>
+        <input type="button" value="dec" onClick="dec();"/>
+        <input type="button" value="getTransactionInfo" onClick="getTransactionInfo()"/>
+    </div>  
 
+    <div id="resultTransactionInfo">
+    </div>
 </body>
 </html>
