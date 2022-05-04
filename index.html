@@ -96,7 +96,7 @@
     
     async function getTransactionInfo(){
         let resultTransaction = document.getElementById("resultTransaction");
-        let transaction = resultTransaction.innerText;
+        let transaction = resultTransaction.value;
         if(transaction == ""){
             return;
         }
@@ -113,7 +113,7 @@
 
     function displayTransaction(string){
         let resultTransaction = document.getElementById("resultTransaction");
-        resultTransaction.innerText = string;
+        resultTransaction.value = string;
     }
 
 </script>
@@ -124,7 +124,7 @@
             Count: <span id="resultCount"></span>
         </div>
         <div>
-            Transaction: <span id="resultTransaction"></span>
+            Transaction: <input type="text" id="resultTransaction" size="70"/>
         </div>
         <input type="button" value="get" onClick="get();"/>
         <input type="button" value="inc" onClick="inc();"/>
