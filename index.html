@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
+<script type="text/javascript">	
+
+	// Ganache のデフォルトのポート番号は7545
+    // ganache-cli のデフォルトのポート番号は8545
+    const web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
+
+    // Contract
+    // 環境に合わせて counterAddress と counterAbi を書き換える必要があります。
+    const counterAddress = "0x791C2E0e40B2b96f3aE2F5D3F3661478f73fB49D";
+    const counterAbi = [
+        {
+        "constant": true,
+        "inputs": [],
+        "name": "count",
+        "outputs": [
+            {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+        },
+        {
+        "constant": true,
+        "inputs": [],
+        "name": "get",
+        "outputs": [
+            {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+        },
+        {
+        "constant": false,
+        "inputs": [],
+        "name": "inc",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+        },
+        {
+        "constant": false,
+        "inputs": [],
+        "name": "dec",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+        }
+    ];
+  
+    // Counter コントラクトのインスタンスを生成
+    const counter = new web3.eth.Contract(counterAbi, counterAddress);
+
+    async function getCoinbase(){
+        let accounts = await web3.eth.getAccounts();
+        // 先頭のアカウントを coinbase とみなす
+        let coinbase = accounts[0];
+        return coinbase;
+    }
+    async function get(){
+        //Contract
+        let count = await counter.methods.get().call();
+        console.log(count);
+    }
+
+    async function inc(){
+        //Contract
+        let coinbase = await getCoinbase();
+        let incResult = await counter.methods.inc().send({from: coinbase});
+        console.log(incResult);
+    }
+
+    async function dec(){
+        //Contract
+        let coinbase = await getCoinbase();
+        let decResult = await counter.methods.dec().send({from: coinbase});
+        console.log(decResult);
+    }
+
+</script>
+</head>
+<body>
+
+    <input type="button" value="get" onClick="get();"/>
+    <input type="button" value="inc" onClick="inc();"/>
+    <input type="button" value="dec" onClick="dec();"/>
+
+</body>
+</html>
